@@ -5,7 +5,7 @@
 #install.packages('acebayes')
 #ssetwd("~/08_Learning/Split Plot Fast Flexible Filling Design")
 
-### test 2
+### test 4
 
 getwd()
 source(file = "FFFSplitplotFunctions_20200103.R")
