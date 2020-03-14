@@ -1,0 +1,58 @@
+/*Design Script for Split Plot Fast Flexible filling*/
+
+/*Creat a random matrix
+*/
+
+d = 4;
+nstart = 1000;
+n = 20;
+nWP = 10;
+
+dt1 = new table("Random Numbers", add rows(nstart));
+dt1 << Add Multiple Columns( "beginning", d-1, Before First, Numeric);
+
+for(i = 1, i <= d, i++,
+	col = column(i);
+	col << set name("Column");
+	col << set formula(Random Uniform());
+);
+
+
+CL1 =  dt1 << Hierarchical Cluster(
+	Y( :Column, :Column 2),
+	Method( "Ward" ),
+	Standardize Data( 1 ),
+	Dendrogram Scale( "Distance Scale" ),
+	Number of Clusters( n ),
+	SendToReport( Dispatch( {}, "Dendrogram", OutlineBox, {SetHorizontal( 1 )} ) )
+);
+
+CL1 << save clusters;
+dt2 = CL1 << save cluster means;
+dt2 << set name("Cluster Means WP");
+current data table(dt2);
+column(3) << set name("Column 1 CM");
+column(4) << set name("Column 2 CM");
+
+dt3 = dt2 << Join(
+	With( dt1 ),
+	Merge Same Name Columns,
+	By Matching Columns( :Cluster = :Cluster ),
+	Drop multiples( 0, 0 ),
+	Include Nonmatches( 0, 0 ),
+	Preserve main table order( 1 )
+);
+
+CL2 = dt3 << Hierarchical Cluster(
+	Y( :Column 1 CM, :Column 2 CM, :Column 3, :Column 4 ),
+	Method( "Ward" ),
+	Standardize Data( 1 ),
+	Dendrogram Scale( "Distance Scale" ),
+	Number of Clusters( 100 ),
+	SendToReport( Dispatch( {}, "Dendrogram", OutlineBox, {SetHorizontal( 1 )} ) )
+);
+
+CL2 << save clusters;
+dt3 = CL2 << save cluster means;
+dt3 << set name("Cluster Means All");
+
