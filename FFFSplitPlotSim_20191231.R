@@ -3,7 +3,9 @@
 #setwd("/home/rstudio/SPFFF")
 #install.packages('mvtnorm')
 #install.packages('acebayes')
-setwd("~/08_Learning/Split Plot Fast Flexible Filling Design")
+#ssetwd("~/08_Learning/Split Plot Fast Flexible Filling Design")
+
+### test
 
 getwd()
 source(file = "FFFSplitplotFunctions_20200103.R")
